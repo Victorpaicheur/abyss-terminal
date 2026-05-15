@@ -86,9 +86,10 @@
     .grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
+      gap: 18px;
       z-index: 1;
-      align-content: stretch;
+      align-content: center;
+      justify-content: center;
     }
 
     .room {
@@ -100,7 +101,7 @@
       grid-template-columns: auto 1fr auto;
       align-items: center;
       gap: 12px;
-      min-height: 76px;
+      min-height: 82px;
       box-shadow: inset 0 0 18px rgba(0, 150, 200, 0.08);
       cursor: pointer;
       user-select: none;
@@ -128,6 +129,32 @@
       text-shadow: 0 0 12px rgba(0, 255, 120, 0.55);
     }
 
+    .room.danger {
+      border-color: rgba(255, 40, 40, 0.9);
+      background: linear-gradient(135deg, rgba(105, 0, 0, 0.95), rgba(35, 0, 0, 0.95));
+      box-shadow:
+        0 0 22px rgba(255, 0, 0, 0.35),
+        inset 0 0 24px rgba(255, 0, 0, 0.18);
+    }
+
+    .room.danger .lock {
+      background: rgba(255, 0, 0, 0.18);
+      border-color: rgba(255, 80, 80, 0.85);
+      color: #ff4b4b;
+      box-shadow: 0 0 16px rgba(255, 0, 0, 0.35);
+    }
+
+    .room.danger .number,
+    .room.danger .label {
+      color: #ff4b4b;
+      text-shadow: 0 0 12px rgba(255, 0, 0, 0.65);
+    }
+
+    .room.danger .info h2 {
+      color: #ff6b6b;
+      text-shadow: 0 0 12px rgba(255, 0, 0, 0.65);
+    }
+
     .lock {
       width: 42px;
       height: 42px;
@@ -146,7 +173,6 @@
       font-size: clamp(16px, 1.5vw, 24px);
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-bottom: 5px;
     }
 
     .cost {
@@ -196,7 +222,7 @@
       }
 
       .room {
-        min-height: 66px;
+        min-height: 76px;
       }
     }
   </style>
@@ -267,7 +293,7 @@
       <div class="room">
         <div class="lock">▣</div>
         <div class="info">
-          <h2>Reserve</h2>
+          <h2>Zone contaminée</h2>
         </div>
         <div class="cost">
           <div class="number">13</div>
@@ -297,10 +323,10 @@
         </div>
       </div>
 
-      <div class="room">
-        <div class="lock">▣</div>
+      <div class="room danger">
+        <div class="lock">!</div>
         <div class="info">
-          <h2>Tour de communication</h2>
+          <h2>Réserve</h2>
         </div>
         <div class="cost">
           <div class="number">20</div>
@@ -311,32 +337,10 @@
       <div class="room">
         <div class="lock">▣</div>
         <div class="info">
-          <h2>Réacteur secondaire</h2>
+          <h2>Tour de communication</h2>
         </div>
         <div class="cost">
-          <div class="number">24</div>
-          <div class="label">pièces</div>
-        </div>
-      </div>
-
-      <div class="room">
-        <div class="lock">▣</div>
-        <div class="info">
-          <h2>Bunker archives</h2>
-        </div>
-        <div class="cost">
-          <div class="number">28</div>
-          <div class="label">pièces</div>
-        </div>
-      </div>
-
-      <div class="room">
-        <div class="lock">▣</div>
-        <div class="info">
-          <h2>Zone secrète Omega</h2>
-        </div>
-        <div class="cost">
-          <div class="number">35</div>
+          <div class="number">23</div>
           <div class="label">pièces</div>
         </div>
       </div>
@@ -347,12 +351,16 @@
       <span class="blink">ACCÈS RESTREINT</span>
     </footer>
   </main>
+
   <script>
     const rooms = document.querySelectorAll('.room');
 
     rooms.forEach((room) => {
       room.addEventListener('click', () => {
+        if (room.classList.contains('danger')) return;
+
         room.classList.toggle('unlocked');
+
         const lock = room.querySelector('.lock');
         lock.textContent = room.classList.contains('unlocked') ? '✓' : '▣';
       });
